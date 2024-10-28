@@ -1,0 +1,65 @@
+# langchain-ai/langchain Daily Progress - 2024-10-28
+
+## Issues
+- "Action Input" lost the last symbols when using AgentExecutor #27673
+- docs: Fixed Grammer & Improve reading #27672
+- community:  Add Cloudflare AI Gateway option for Cloudflare workers-ai LLM #27671
+- langchain:Add intersection support for multiquery retriever #27670
+- Model using internal knowledge to answer the question when it is not supposed to in GraphSparqlQAChain #27669
+- DOC: Improving Documentation for Tool Integration in LangChain #27668
+- community: Add Snowflake model session handling via keyfile and external sessions #27664
+- DOC: The bedrock documentation is under "AWS" it needs to change to the earlier "Bedrock" #27661
+- I Can't use HuggingFaceEmbeddings and HuggingFaceBgeEmbeddings #27659
+- fix the grammar and markdown component #27657
+- Multi-agent supervisor example not working with ChatOllama, breaks when attempting to use two system messages. Must be an issue with using two system prompts in ChatOllama. #27656
+- community: Update Replicate LLM and fix tests #27655
+- community: Add Writer integration #27646
+- Add ChatModels wrapper for Cloudflare Workers AI #27645
+- community: add ObjectBox as a vector-store #27644
+- AzureSearch error #27643
+- How do I use langchain for vllm serve tool calls£¿ #27642
+- Fix typo (missing letter) in elasticsearch_retriever.ipynb #27639
+- DOC: data parsing error handling (if retry and data fixing does not work) #27635
+- [AIMessage]tool_calls.0.args is not always returned as a valid dictionary #27632
+- community: failing unit test with sqlalchemy 2.0.36 #27627
+- Error during FAISS save_local due to __pydantic_private__ attribute #27625
+- Cant import any of the HuggingFaceEmbeddings because 'openssl' has no attribute 'ciphers' #27624
+- Confluence Loader: Fix CQL loading #27620
+- core: Modified RunnableWithMessageHistory get_input_schema to make use of the underlying runnable input keys. #27619
+- docs: run how-to guides in CI #27615
+- check broken links #27614
+- Various warnings due to Pydantic protected namespaces, such as UserWarning: Field "model_name" in JinaEmbeddings has conflict with protected namespace "model_". #27609
+- community: Add `@mozilla/readability` document transformer #27604
+- community: handle chatdeepinfra jsondecode error #27603
+
+## Pull Requests
+- docs: Fixed Grammer & Improve reading #27672
+- community:  Add Cloudflare AI Gateway option for Cloudflare workers-ai LLM #27671
+- langchain:Add intersection support for multiquery retriever #27670
+- community: Add Snowflake model session handling via keyfile and external sessions #27664
+- fix the grammar and markdown component #27657
+- community: Update Replicate LLM and fix tests #27655
+- community: Add Writer integration #27646
+- Add ChatModels wrapper for Cloudflare Workers AI #27645
+- community: add ObjectBox as a vector-store #27644
+- Fix typo (missing letter) in elasticsearch_retriever.ipynb #27639
+- Confluence Loader: Fix CQL loading #27620
+- core: Modified RunnableWithMessageHistory get_input_schema to make use of the underlying runnable input keys. #27619
+- docs: run how-to guides in CI #27615
+- check broken links #27614
+- community: Add `@mozilla/readability` document transformer #27604
+- community: handle chatdeepinfra jsondecode error #27603
+- rfc: trace standard tool schema directly #27596
+- langchain_openai: AZURE_OPENAI_DEPLOYMENT environment variable #27595
+- langchain-openai: add check for none values when summing token usage #27585
+- core: update load chat prompt template multi mesages #27584
+- neo4j: initial package #27582
+- [community] Pebblo: Policy-based semantic context in PebbloRetrievalQA #27581
+- docs: anchor redirect #27556
+- community: Update Polygon.io API #27552
+- core[patch]: support handle_tool_error=(Exception, ...) tuple #27547
+- community: add router chain based on the classify API from Jina AI #27540
+- Update mongodb_atlas docs #27530
+- community: sambanovacloud llm integration #27526
+- partners/huggingface: fix HuggingFacePipeline model_id parameter #27514
+- core: Add support for creating structured tools from partial functions #27501

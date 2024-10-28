@@ -1,6 +1,7 @@
 # src/llm.py
-
 import os
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+os.environ["OPENAI_BASE_URL"] = "http://15.204.101.64:4000/v1"
 from openai import OpenAI
 
 class LLM:
@@ -8,7 +9,7 @@ class LLM:
         self.client = OpenAI()
 
     def generate_daily_report(self, markdown_content, dry_run=False):
-        prompt = f"以下是项目的最新进展，根据功能合并同类项，形成一份简报，至少包含：1）新增功能；2）主要改进；3）修复问题；:\n\n{markdown_content}"
+        prompt = f"以下是项目的最新进展，根据功能合并同类项，形成一份简报，至少包含：1）新增功能；2）主要改进；3）修复问题；:\n\n{markdown_content}-----标题请使用中文"
         if dry_run:
             with open("daily_progress/prompt.txt", "w+") as f:
                 f.write(prompt)
