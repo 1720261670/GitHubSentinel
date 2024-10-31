@@ -3,9 +3,9 @@
     "email":  {
         "smtp_server": "smtp.exmail.qq.com",
         "smtp_port": 465,
-        "from": "pjt@zaijidata.com",
+        "from": "liguang@szm272.wecom.work",
         "password": "",
-        "to": "test@zaijidata.com"
+        "to": "liguang@szm272.wecom.work"
     },
     "slack_webhook_url": "your_slack_webhook_url",
     "subscriptions_file": "subscriptions.json",
