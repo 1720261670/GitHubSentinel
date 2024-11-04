@@ -26,7 +26,7 @@ class Config:
 
             # 加载 LLM 相关配置
             llm_config = config.get('llm', {})
-            self.llm_model_type = llm_config.get('model_type', 'openai')
+            self.llm_model_type = llm_config.get('model_type', 'ollama')
             self.openai_model_name = llm_config.get('openai_model_name', 'gpt-4o-mini')
-            self.ollama_model_name = llm_config.get('ollama_model_name', 'llama3')
+            self.ollama_model_name = llm_config.get('ollama_model_name', 'llama3.1')
             self.ollama_api_url = llm_config.get('ollama_api_url', 'http://localhost:11434/api/chat')

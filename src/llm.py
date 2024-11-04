@@ -1,9 +1,12 @@
 import json
 import requests
+import os
 from logger import LOG  # 导入日志模块
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+os.environ["OPENAI_BASE_URL"] = "http://15.204.101.64:4000/v1"
 
 class LLM:
-    def __init__(self, config):
+    def __init__(self, config, prompt):
         """
         初始化 LLM 类，根据配置选择使用的模型（OpenAI 或 Ollama）。
         
@@ -20,7 +23,7 @@ class LLM:
             raise ValueError(f"Unsupported model type: {self.model}")  # 如果模型类型不支持，抛出错误
         
         # 从TXT文件加载系统提示信息
-        with open("prompts/report_prompt.txt", "r", encoding='utf-8') as file:
+        with open("prompts/"+prompt, "r", encoding='utf-8') as file:
             self.system_prompt = file.read()
 
     def generate_daily_report(self, markdown_content, dry_run=False):
@@ -88,7 +91,22 @@ class LLM:
             }
             response = requests.post(self.api_url, json=payload)  # 发送POST请求到Ollama API
             response_data = response.json()
-            
+            # {
+            # 	"model": "llama3.1",
+            # 	"created_at": "2024-11-04T07:23:17.742583Z",
+            # 	"message": {
+            # 		"role": "assistant",
+            # 		"content": "很高兴与您见面！我是一名AI程序员和机器学习模型专家，我负责开发和培训一系列的语言模型，包括ChatBot类似如我这样的对话系统。"
+            # 	},
+            # 	"done_reason": "stop",
+            # 	"done": true,
+            # 	"total_duration": 86645803400,
+            # 	"load_duration": 26366185100,
+            # 	"prompt_eval_count": 31,
+            # 	"prompt_eval_duration": 20852959000,
+            # 	"eval_count": 45,
+            # 	"eval_duration": 39393629000
+            # }
             # 调试输出查看完整的响应结构
             LOG.debug("Ollama response: {}", response_data)
             
