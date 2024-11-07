@@ -31,7 +31,19 @@ class Notifier:
             self.send_email(subject, report)
         else:
             LOG.warning("邮件设置未配置正确，无法发送 Hacker News 报告通知")
-    
+
+    def notify_wb_report(self, date, report):
+        """
+        发送 Hacker News 每日技术趋势报告邮件
+        :param date: 报告日期
+        :param report: 报告内容
+        """
+        if self.email_settings:
+            subject = f"[微博] {date} 热搜趋势"
+            self.send_email(subject, report)
+        else:
+            LOG.warning("邮件设置未配置正确，无法发送 微博 报告通知")
+
     def send_email(self, subject, report):
         LOG.info(f"准备发送邮件:{subject}")
         msg = MIMEMultipart()

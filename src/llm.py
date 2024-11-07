@@ -2,6 +2,9 @@ import json
 import requests
 from openai import OpenAI  # 导入OpenAI库用于访问GPT模型
 from logger import LOG  # 导入日志模块
+import os
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+os.environ["OPENAI_BASE_URL"] = "http://15.204.101.64:4000/v1"
 
 class LLM:
     def __init__(self, config):

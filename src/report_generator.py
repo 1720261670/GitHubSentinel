@@ -88,6 +88,44 @@ class ReportGenerator:
                     markdown_content += file.read() + "\n"
         return markdown_content
 
+    def generate_wb_topic_report(self, markdown_file_path):
+        """
+        生成 weibo 小时主题的报告，并保存为 {original_filename}_topic.md。
+        """
+        with open(markdown_file_path, 'r') as file:
+            markdown_content = file.read()
+
+        system_prompt = self.prompts.get("weibo_hours_topic")
+        report = self.llm.generate_report(system_prompt, markdown_content)
+
+        report_file_path = os.path.splitext(markdown_file_path)[0] + "_topic.md"
+        with open(report_file_path, 'w+') as report_file:
+            report_file.write(report)
+
+        LOG.info(f"weibo 热点主题报告已保存到 {report_file_path}")
+        return report, report_file_path
+
+    def generate_wb_daily_report(self, directory_path):
+        """
+        生成 Hacker News 每日汇总的报告，并保存到 hacker_news/tech_trends/ 目录下。
+        这里的输入是一个目录路径，其中包含所有由 generate_hn_topic_report 生成的 *_topic.md 文件。
+        """
+        markdown_content = self._aggregate_topic_reports(directory_path)
+        system_prompt = self.prompts.get("weibo_daily_report")
+
+        base_name = os.path.basename(directory_path.rstrip('/'))
+        report_file_path = os.path.join("weibo/tech_trends/", f"{base_name}_trends.md")
+
+        # 确保 tech_trends 目录存在
+        os.makedirs(os.path.dirname(report_file_path), exist_ok=True)
+
+        report = self.llm.generate_report(system_prompt, markdown_content)
+
+        with open(report_file_path, 'w+') as report_file:
+            report_file.write(report)
+
+        LOG.info(f"weibo 每日汇总报告已保存到 {report_file_path}")
+        return report, report_file_path
 
 if __name__ == '__main__':
     from config import Config  # 导入配置管理类
@@ -97,9 +135,9 @@ if __name__ == '__main__':
     llm = LLM(config)
     report_generator = ReportGenerator(llm, config.report_types)
 
-    # hn_hours_file = "./hacker_news/2024-09-01/14.md"
-    hn_daily_dir = "./hacker_news/2024-09-01/"
+    hn_hours_file = "weibo\\2024-11-07\\14.md"
+    # hn_daily_dir = "weibo/2024-11-07/"
 
-    # report, report_file_path = report_generator.generate_hn_topic_report(hn_hours_file)
-    report, report_file_path = report_generator.generate_hn_daily_report(hn_daily_dir)
+    report, report_file_path = report_generator.generate_wb_topic_report(hn_hours_file)
+    # report, report_file_path = report_generator.generate_wb_daily_report(hn_daily_dir)
     LOG.debug(report)

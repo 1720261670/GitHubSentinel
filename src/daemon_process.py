@@ -8,6 +8,7 @@ from datetime import datetime  # 导入 datetime 模块用于获取当前日期
 from config import Config  # 导入配置管理类
 from github_client import GitHubClient  # 导入GitHub客户端类，处理GitHub API请求
 from hacker_news_client import HackerNewsClient
+from weibo_client import WeiBoClient
 from notifier import Notifier  # 导入通知器类，用于发送通知
 from report_generator import ReportGenerator  # 导入报告生成器类
 from llm import LLM  # 导入语言模型类，可能用于生成报告内容
@@ -52,6 +53,24 @@ def hn_daily_job(hacker_news_client, report_generator, notifier):
     LOG.info(f"[定时任务执行完毕]")
 
 
+def wb_topic_job(weibo_client, report_generator):
+    LOG.info("[开始执行定时任务]微博 热搜跟踪")
+    markdown_file_path = weibo_client.export_trending()
+    _, _ = report_generator.generate_wb_topic_report(markdown_file_path)
+    LOG.info(f"[定时任务执行完毕]")
+
+
+def wb_daily_job(weibo_client, report_generator, notifier):
+    LOG.info("[开始执行定时任务]微博 热搜 今日趋势")
+    # 获取当前日期，并格式化为 'YYYY-MM-DD' 格式
+    date = datetime.now().strftime('%Y-%m-%d')
+    # 生成每日汇总报告的目录路径
+    directory_path = os.path.join('weibo', date)
+    # 生成每日汇总报告并保存
+    report, _ = report_generator.generate_wb_daily_report(directory_path)
+    notifier.notify_wb_report(date, report)
+    LOG.info(f"[定时任务执行完毕]")
+
 def main():
     # 设置信号处理器
     signal.signal(signal.SIGTERM, graceful_shutdown)
@@ -59,6 +78,7 @@ def main():
     config = Config()  # 创建配置实例
     github_client = GitHubClient(config.github_token)  # 创建GitHub客户端实例
     hacker_news_client = HackerNewsClient() # 创建 Hacker News 客户端实例
+    weibo_client = WeiBoClient()
     notifier = Notifier(config.email)  # 创建通知器实例
     llm = LLM(config)  # 创建语言模型实例
     report_generator = ReportGenerator(llm, config.report_types)  # 创建报告生成器实例
@@ -67,7 +87,7 @@ def main():
     # 启动时立即执行（如不需要可注释）
     # github_job(subscription_manager, github_client, report_generator, notifier, config.freq_days)
     hn_daily_job(hacker_news_client, report_generator, notifier)
-
+    wb_daily_job(weibo_client, report_generator, notifier)
     # 安排 GitHub 的定时任务
     schedule.every(config.freq_days).days.at(
         config.exec_time
@@ -78,6 +98,12 @@ def main():
 
     # 安排 hn_daily_job 每天早上10点执行一次
     schedule.every().day.at("10:00").do(hn_daily_job, hacker_news_client, report_generator, notifier)
+
+    # 安排 wb_topic_job 每3小时执行一次，从0点开始
+    schedule.every(3).hours.at(":00").do(wb_topic_job, weibo_client, report_generator)
+
+    # 安排 wb_daily_job 每天早上9点执行一次
+    schedule.every().day.at("09:00").do(wb_daily_job, weibo_client, report_generator, notifier)
 
     try:
         # 在守护进程中持续运行
