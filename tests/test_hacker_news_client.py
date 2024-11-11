@@ -69,9 +69,9 @@ class TestHackerNewsClient(unittest.TestCase):
         file_path = self.client.export_top_stories(date="2024-09-01", hour="14")
         
         # 验证目录和文件创建
-        mock_makedirs.assert_called_once_with('hacker_news/2024-09-01', exist_ok=True)
-        mock_open.assert_called_once_with('hacker_news/2024-09-01/14.md', 'w')
-        
+        mock_makedirs.assert_called_once_with('hacker_news\\2024-09-01', exist_ok=True)
+        mock_open.assert_called_once_with('hacker_news\\2024-09-01\\14.md', 'w')
+
         # 验证文件内容
         mock_open().write.assert_any_call("# Hacker News Top Stories (2024-09-01 14:00)\n\n")
         mock_open().write.assert_any_call("1. [Story 1](https://news.ycombinator.com/)\n")
